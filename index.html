@@ -1,55 +1,103 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>My Portfolio</title>
+    <meta charset="utf-8">
+    <title>Tic Tac Toe</title>
     <style>
-      /* Add your CSS styles here */
-      body {
-        font-family: Arial, sans-serif;
-        
-      }
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        text-align: center;
-        background-color:rbg(0,0,0);
-      }
-      .project {
+      /* Add some style to the game */
+      .game-board {
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        width: 300px;
+        height: 300px;
+        border: 2px solid black;
+      }
+      .row {
+        display: flex;
+      }
+      .cell {
+        display: flex;
+        justify-content: center;
         align-items: center;
-        margin: 20px 0;
-      }
-      .project img {
-        width: 200px;
-        border-radius: 5px;
-      }
-      .project h3 {
-        margin: 10px 0;
-      }
-      .project p {
-        font-size: 14px;
+        width: 100px;
+        height: 100px;
+        font-size: 48px;
+        border: 1px solid black;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>My Portfolio</h1>
-      <p>Welcome to my portfolio website. Here are a few projects that I have worked on:</p>
-      <div class="project">
-        <img src="m.jpg" alt="Project 1">
-        <h3>Project 1</h3>
-        <p>A brief description of project 1 goes here.</p>
-      </div>
-      <div class="project">
-        <img src="/k.jpg" alt="Project 2">
-        <h3>Project 2</h3>
-        <p>A brief description of project 2 goes here.</p>
-      </div>
-      <div class="project">
-        <img src="/n.jpg" alt="Project 3">
-        <h3>Project 3</h3>
-        <p>A brief description of project 3 goes here.</p>
-      </div>
+    <div class="game-board">
+      <!-- The game board will be added here dynamically using JavaScript -->
     </div>
-  </body>
+    <script>
+      // Add the game board and cells to the DOM
+      const board = document.querySelector('.game-board');
+
+      for (let i = 0; i < 3; i++) {
+        const row = document.createElement('div');
+        row.classList.add('row');
+
+        for (let j = 0; j < 3; j++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.addEventListener('click', handleClick);
+          row.appendChild(cell);
+        }
+
+        board.appendChild(row);
+      }
+
+      // Game state
+      let currentPlayer = 'X';
+      let gameOver = false;
+
+      // Handle click events on the cells
+      function handleClick(event) {
+        if (gameOver) return;
+
+        const cell = event.target;
+        if (cell.textContent) return;
+
+        // Update the cell with the current player's symbol
+        cell.textContent = currentPlayer;
+
+        // Check if the game is won
+        if (checkWin()) {
+          gameOver = true;
+          alert(`Player ${currentPlayer} wins!`);
+        } else {
+          // Switch players
+          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        }
+      }
+
+      // Check if the current player has won the game
+      function checkWin() {
+        const cells = document.querySelectorAll('.cell');
+        const winningCombinations = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8],
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8],
+          [0, 4, 8],
+          [2, 4, 6]
+        ];
+
+        for (const combination of winningCombinations) {
+          if (
+            cells[combination[0]].textContent === currentPlayer &&
+            cells[combination[1]].textContent === currentPlayer &&
+            cells[combination[2]].textContent === currentPlayer
+          ) {
+            return true;
+          }
+        }
+
+        return false;
+     
+        </script>
+</body>
 </html>
